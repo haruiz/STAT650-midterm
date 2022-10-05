@@ -33,16 +33,12 @@ def filter_data_based_on_missing_values(
     return df[df.columns[df.isnull().mean() < threshold]]
 
 
-def get_cols_description(data_df: pd.DataFrame, cols_df: pd.DataFrame) -> dict:
+def get_cols_description(cols_df: pd.DataFrame) -> dict:
     """Get the description of the columns of a dataframe
     @param df: dataframe
     @return: description of the columns
     """
-    columns = data_df.columns.tolist()
-    return {
-        col_name: cols_df[cols_df["column"] == col_name]["description"].values[0]
-        for col_name in columns
-    }
+    return dict(zip(cols_df["column"], cols_df["description"]))
 
 
 def get_numeric_columns(df):
