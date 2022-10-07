@@ -7,7 +7,7 @@ authors = ["Henry Ruiz  <henryruiz22@gmail.com>"]
 [tool.poetry.dependencies]
 python = ">=3.10,<3.12"
 numpy = "^1.23.2"
-pandas = "^1.4.4"
+pandas = "^1.5.0"
 jupyter = "^1.0.0"
 jupyterlab = "^3.4.5"
 scipy = "^1.9.1"

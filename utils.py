@@ -328,6 +328,7 @@ def plot_co2_emissions_by_year(df: pd.DataFrame, country: str):
     """
     country_data = get_observed_values_by_country(df, country)
     sns.lineplot(data=country_data, x="year", y="co2")
+    plt.title(f"CO2 emissions by year - {country}")
 
 
 def plot_co2_emissions_by_continent(df: pd.DataFrame, continent: str, top: int = None):
@@ -342,3 +343,4 @@ def plot_co2_emissions_by_continent(df: pd.DataFrame, continent: str, top: int =
         top_n_countries = continent_data["country"].unique().tolist()[:top]
         continent_data = continent_data[continent_data["country"].isin(top_n_countries)]
     sns.lineplot(data=continent_data, x="year", y="co2", hue="country")
+    plt.title(f"CO2 emissions by year - {continent}")
