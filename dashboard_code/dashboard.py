@@ -2,7 +2,7 @@ import dash_bootstrap_components as dbc
 from dash import Dash, html
 
 from dataset import Dataset
-from gui.navbar import NavBar
+from navbar import NavBar
 from sections import *
 
 
@@ -18,6 +18,7 @@ class Dashboard:
         self._description = description
         # create the application
         self._app = Dash(__name__, external_stylesheets=[dbc.themes.COSMO])
+        self._app.title = title
 
     def _get_sections(self) -> list:
         """
@@ -64,4 +65,4 @@ class Dashboard:
         :return:
         """
         self.build()  # build the layout
-        self._app.run_server(debug=True)  # run the app in debug mode
+        self._app.run_server(host='0.0.0.0')

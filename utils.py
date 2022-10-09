@@ -22,8 +22,16 @@ def load_data(uri: str) -> pd.DataFrame:
     return pd.read_csv(uri)
 
 
+def percent_of_columns_with_missing_values(df: pd.DataFrame) -> float:
+    """Percentage of columns with missing values
+    @param df: dataframe
+    @return: percentage of columns with missing values
+    """
+    return df.isnull().mean().mean().round(2)
+
+
 def filter_data_based_on_missing_values(
-    df: pd.DataFrame, threshold: float = 0.5
+        df: pd.DataFrame, threshold: float = 0.5
 ) -> pd.DataFrame:
     """Filter data based on missing values
     @param df: dataframe
@@ -31,6 +39,81 @@ def filter_data_based_on_missing_values(
     @return: filtered dataframe
     """
     return df[df.columns[df.isnull().mean() < threshold]]
+
+
+def plot_proportion_of_missing_values_by_column(df: pd.DataFrame,threshold: float = 0.5) -> dict:
+    """List the proportion of missing values by column
+    @param df: dataframe
+    @return: list of missing values by column
+    """
+    cols_proportion = df.isnull().mean().round(2).tolist()
+    cols_names = df.columns.tolist()
+
+    proportion_df = pd.DataFrame({"column": cols_names, "proportion": cols_proportion})
+    proportion_df = proportion_df.sort_values(by="proportion", ascending=True)
+
+    prop_greater_than_threshold = proportion_df[proportion_df["proportion"] > threshold]
+    prop_less_than_threshold = proportion_df[proportion_df["proportion"] <= threshold]
+
+    fig, ax = plt.subplots(figsize=(10, 15))
+    ax.barh(prop_less_than_threshold["column"], prop_less_than_threshold["proportion"])
+    ax.barh(prop_greater_than_threshold["column"], prop_greater_than_threshold["proportion"], color="red")
+    ax.set_title("Proportion of missing values by column")
+    ax.set_xlabel("Proportion of missing values")
+    ax.set_ylabel("Column")
+    ax.set_xlim(0, 1)
+    ax.set_xticks(np.arange(0, 1.1, 0.1))
+    ax.set_xticklabels([f"{i}%" for i in range(0, 110, 10)])
+    ax.grid(axis="x")
+    plt.show()
+
+
+
+def plot_number_of_countries_by_continent(df: pd.DataFrame, ax=None) -> None:
+    """Plot the number of countries by continent
+    @param df: dataframe
+    @return: None
+    """
+    if ax is None:
+        fig, ax = plt.subplots()
+    df["continent"].value_counts().plot(kind="bar", ax=ax)
+    ax.set_title("Number of countries by continent")
+    ax.set_xlabel("Continent")
+    ax.set_ylabel("Number of countries")
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")
+
+
+def plot_number_observations_by_country(df, ax=None):
+    """
+    Plot the number of observations by country
+    :param df: input dataframe
+    :param ax: matplotlib axis
+    :return: None
+    """
+    if ax is None:
+        fig, ax = plt.subplots()
+    df.groupby("country").size().sort_values(ascending=False).plot(kind="bar", ax=ax)
+    ax.set_title("Number of observations by country")
+    ax.set_xlabel("Country")
+    ax.set_ylabel("Number of observations")
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=90, ha="right")
+    plt.show()
+
+
+def plot_distribution_of_numeric_columns(df: pd.DataFrame) -> None:
+    """Plot the distribution of the numeric columns
+    @param df: dataframe
+    @return: None
+    """
+    sns.set_theme(style="whitegrid")
+    numeric_cols = get_numeric_columns(df)
+    for col in numeric_cols:
+        fig, ax = plt.subplots()
+        sns.boxplot(x=df[col], ax=ax)
+        ax.set_title(f"Distribution of {col}")
+        ax.set_xlabel(col)
+        ax.set_ylabel("Value")
+        plt.show()
 
 
 def get_cols_description(cols_df: pd.DataFrame) -> dict:
@@ -184,7 +267,7 @@ def get_continent_from_country_name(country: str) -> Any | None:
 
 
 def get_lat_and_long_from_country_name(
-    country: str, application: str, raise_exception=True
+        country: str, application: str, raise_exception=True
 ):
     """Get the latitude and longitude of a location
     @param country: country
@@ -203,7 +286,7 @@ def get_lat_and_long_from_country_name(
 
 
 def add_lat_and_long_to_df(
-    df: pd.DataFrame, application: str = "STAT650-midterm"
+        df: pd.DataFrame, application: str = "STAT650-midterm"
 ) -> pd.DataFrame:
     """Add latitude and longitude to a dataframe
     @param df: dataframe
@@ -331,12 +414,14 @@ def plot_co2_emissions_by_year(df: pd.DataFrame, country: str):
     plt.title(f"CO2 emissions by year - {country}")
 
 
-def plot_co2_emissions_by_continent(df: pd.DataFrame, continent: str, top: int = None):
+def plot_co2_emissions_by_continent(df: pd.DataFrame, continent: str, top: int = None, ax=None):
     """Plot the CO2 emissions by year
     @param df: dataframe
     @param continent: continent
     @param top: top countries to plot
     """
+    if ax is None:
+        fig, ax = plt.subplots()
     continent_data = get_observed_values_by_continent(df, continent)
     continent_data = continent_data.sort_values("co2", ascending=False)
     if top is not None:
