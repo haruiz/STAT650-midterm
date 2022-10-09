@@ -140,7 +140,7 @@ def plot_df(df, ncols=3):
     i = 0
     for col in range(ncols):
         for row in range(nrows):
-            plot_df_col(data, df.columns[i], fig=subfigs[row][col])
+            plot_df_col(df, df.columns[i], fig=subfigs[row][col])
             i += 1
 
 

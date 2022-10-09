@@ -23,6 +23,8 @@ plotly = "^5.10.0"
 dash = "^2.6.2"
 jupyter-dash = "^0.4.2"
 ipykernel = "^6.16.0"
+dash-bootstrap-components = "^1.2.1"
+sklearn = "^0.0"
 
 [tool.poetry.dev-dependencies]
 black = "^22.8.0"
