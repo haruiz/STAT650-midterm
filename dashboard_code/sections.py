@@ -44,19 +44,15 @@ class Q1Section(DashboardSection):
         )  # create corr features heatmap
         return dcc.Graph(figure=fig)
 
-    def layout(self) -> html.Div:
+    def layout(self):
         """
         Returns the layout for the Q1 section
         :return:
         """
-        return html.Div(
-            children=[
-                dbc.Row(
-                    [
-                        dbc.Col([html.Div([self._dropdown, self._graph])]),
-                        dbc.Col([html.Div([self.__mk_corr_heatmap_plot()])]),
-                    ]
-                )
+        return dbc.Row(
+            [
+                dbc.Col([html.Div([self._dropdown, self._graph])], xs=dict(order=1, size=12), sm=dict(order=1, size=6)),
+                dbc.Col([html.Div([self.__mk_corr_heatmap_plot()])],xs=dict(order=1, size=12), sm=dict(order=1, size=6))
             ]
         )
 
@@ -104,27 +100,23 @@ class Q2Section(DashboardSection):
         )
         return dcc.Graph(figure=fig)
 
-    def layout(self) -> html.Div:
+    def layout(self):
         """
         Returns the layout for the Q1 section
         :return:
         """
         graph1 = self.__make_plot_countries_with_greatest_co2_reduction()
         graph2 = self.__make_plot_countries_with_least_co2_reduction()
-        return html.Div(
-            children=[
-                dbc.Row(
-                    [
-                        dbc.Col([html.Div([graph1])]),
-                        dbc.Col([html.Div([graph2])]),
-                    ]
-                )
+        return dbc.Row(
+            [
+                dbc.Col([html.Div([graph1])], xs=dict(order=1, size=12), sm=dict(order=1, size=6)),
+                dbc.Col([html.Div([graph2])], xs=dict(order=1, size=12), sm=dict(order=1, size=6)),
             ]
         )
 
 
 def regression_plot(
-        data: pd.DataFrame, x, y, hue=None, title=None, annotation_loc=None, labels=None
+    data: pd.DataFrame, x, y, hue=None, title=None, annotation_loc=None, labels=None
 ):
     x = data[x].to_numpy()
     y = data[y].to_numpy()
@@ -133,7 +125,6 @@ def regression_plot(
     model = LinearRegression()
     model.fit(x[:, np.newaxis], y[:, np.newaxis])
     coeff = model.coef_.round(3)
-    print(coeff)
 
     fig = px.scatter(
         data,
@@ -191,17 +182,13 @@ class Q3Section(DashboardSection):
             title="Log Emissions vs. Log Population in 2018",
         )
 
-    def layout(self) -> html.Div:
+    def layout(self):
         graph1 = self.mk_regression_plot()
         graph2 = self.mk_regression_plot_after_log()
-        return html.Div(
-            children=[
-                dbc.Row(
-                    [
-                        dbc.Col([html.Div([graph1])]),
-                        dbc.Col([html.Div([graph2])]),
-                    ]
-                )
+        return dbc.Row(
+            [
+                dbc.Col([html.Div([graph1])], xs=dict(order=1, size=12), sm=dict(order=1, size=6)),
+                dbc.Col([html.Div([graph2])], xs=dict(order=1, size=12), sm=dict(order=1, size=6)),
             ]
         )
 
@@ -240,23 +227,28 @@ class Q4Section(DashboardSection):
             title="Log-Log CO2 Emissions vs. GDP in 2018",
         )
 
-    def layout(self) -> html.Div:
+    def layout(self):
         graph1 = self.mk_regression_plot()
         graph2 = self.mk_regression_plot_after_log()
-        return html.Div(
+        return dbc.Row(
             children=[
-                dbc.Row([
-                    html.P(children=[
-                        "GDP: Gross domestic product measured in international-$ using 2011 prices to adjust for price "
-                        "changes over time (inflation) and price differences between countries. Calculated by "
-                        "multiplying GDP "
-                        "per capita with population. "
-                        ])]),
                 dbc.Row(
                     [
-                        dbc.Col([html.Div([graph1])]),
-                        dbc.Col([html.Div([graph2])]),
+                        html.P(
+                            children=[
+                                "GDP: Gross domestic product measured in international-$ using 2011 prices to adjust for price "
+                                "changes over time (inflation) and price differences between countries. Calculated by "
+                                "multiplying GDP "
+                                "per capita with population. "
+                            ]
+                        )
                     ]
-                )
+                ),
+                dbc.Row(
+                    [
+                        dbc.Col([html.Div([graph1])], xs=dict(order=1, size=12), sm=dict(order=1, size=6)),
+                        dbc.Col([html.Div([graph2])], xs=dict(order=1, size=12), sm=dict(order=1, size=6)),
+                    ]
+                ),
             ]
         )

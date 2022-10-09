@@ -31,7 +31,7 @@ def percent_of_columns_with_missing_values(df: pd.DataFrame) -> float:
 
 
 def filter_data_based_on_missing_values(
-        df: pd.DataFrame, threshold: float = 0.5
+    df: pd.DataFrame, threshold: float = 0.5
 ) -> pd.DataFrame:
     """Filter data based on missing values
     @param df: dataframe
@@ -41,7 +41,9 @@ def filter_data_based_on_missing_values(
     return df[df.columns[df.isnull().mean() < threshold]]
 
 
-def plot_proportion_of_missing_values_by_column(df: pd.DataFrame,threshold: float = 0.5) -> dict:
+def plot_proportion_of_missing_values_by_column(
+    df: pd.DataFrame, threshold: float = 0.5
+) -> dict:
     """List the proportion of missing values by column
     @param df: dataframe
     @return: list of missing values by column
@@ -57,7 +59,11 @@ def plot_proportion_of_missing_values_by_column(df: pd.DataFrame,threshold: floa
 
     fig, ax = plt.subplots(figsize=(10, 15))
     ax.barh(prop_less_than_threshold["column"], prop_less_than_threshold["proportion"])
-    ax.barh(prop_greater_than_threshold["column"], prop_greater_than_threshold["proportion"], color="red")
+    ax.barh(
+        prop_greater_than_threshold["column"],
+        prop_greater_than_threshold["proportion"],
+        color="red",
+    )
     ax.set_title("Proportion of missing values by column")
     ax.set_xlabel("Proportion of missing values")
     ax.set_ylabel("Column")
@@ -66,7 +72,6 @@ def plot_proportion_of_missing_values_by_column(df: pd.DataFrame,threshold: floa
     ax.set_xticklabels([f"{i}%" for i in range(0, 110, 10)])
     ax.grid(axis="x")
     plt.show()
-
 
 
 def plot_number_of_countries_by_continent(df: pd.DataFrame, ax=None) -> None:
@@ -267,7 +272,7 @@ def get_continent_from_country_name(country: str) -> Any | None:
 
 
 def get_lat_and_long_from_country_name(
-        country: str, application: str, raise_exception=True
+    country: str, application: str, raise_exception=True
 ):
     """Get the latitude and longitude of a location
     @param country: country
@@ -286,7 +291,7 @@ def get_lat_and_long_from_country_name(
 
 
 def add_lat_and_long_to_df(
-        df: pd.DataFrame, application: str = "STAT650-midterm"
+    df: pd.DataFrame, application: str = "STAT650-midterm"
 ) -> pd.DataFrame:
     """Add latitude and longitude to a dataframe
     @param df: dataframe
@@ -414,7 +419,9 @@ def plot_co2_emissions_by_year(df: pd.DataFrame, country: str):
     plt.title(f"CO2 emissions by year - {country}")
 
 
-def plot_co2_emissions_by_continent(df: pd.DataFrame, continent: str, top: int = None, ax=None):
+def plot_co2_emissions_by_continent(
+    df: pd.DataFrame, continent: str, top: int = None, ax=None
+):
     """Plot the CO2 emissions by year
     @param df: dataframe
     @param continent: continent
